@@ -44,7 +44,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Nuevo(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
+        public ActionResult Nuevo(ListViewModel modelo)
         {
 
             SqlCommand comando = new SqlCommand();
@@ -52,12 +52,7 @@ namespace Web.Controllers
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "AgregarPersonal";
 
-
-            comando.Parameters.AddWithValue("pNombre", Nombre);
-            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
-            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
-            comando.Parameters.AddWithValue("pEdad", Edad);
-            comando.Parameters.AddWithValue("pIs_Active", Is_active);
+           
 
             conexion.Open();
 

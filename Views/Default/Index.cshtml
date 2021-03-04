@@ -9,7 +9,7 @@
 <h2>Personal</h2>
 
 <div class="row" style="text-align:right;padding:5px">
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Nuevo </button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="btnNuevo">Nuevo </button>
 
     <div class="col-md-12">
         <table class="table">
@@ -40,12 +40,12 @@
 
                     <td>
 
-                        <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#myModal"> Actualizar</button>
-
-                        
+                        <button type="submit" id="btnActualizar" class="btn btn-info" data-toggle="modal" data-target="#myModal"> Actualizar</button>
 
 
-                        <button type="submit" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
+
+
+                        <button type="submit" id="btnEliminar" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
                             Eliminar
                         </button>
 
@@ -60,6 +60,12 @@
 
     </div>
 </div>
+
+
+
+
+
+
 
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -78,35 +84,35 @@
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
 
-                <!-- Modal content-->
+                <!-- Contenido del Modal-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form id="Insertar">
                             <div class="form-group">
                                 <label for="nombre">Nombre:</label>
                                 <input type="text" class="form-control" id="nombre">
                             </div>
                             <div class="form-group">
                                 <label for="c1">Apelido Paterno:</label>
-                                <input type="text" class="form-control" id="c1">
+                                <input type="text" class="form-control" id="apellido1">
                             </div>
                             <div class="form-group">
                                 <label for="c2">Apelido Materno</label>
-                                <input type="text" class="form-control" id="c2">
+                                <input type="text" class="form-control" id="apellido2">
                             </div>
                             <div class="form-group">
                                 <label for="c2">Edad</label>
-                                <input type="text" class="form-control" id="c2">
+                                <input type="text" class="form-control" id="edad">
                             </div>
                             <div class="form-group">
                                 <label for="c2">Activo</label>
 
 
-                                <select for="c2">
+                                <select id="active" for="c2">
                                     <option value="True">Activo</option>
 
                                     <option value="False">Inactivo</option>
@@ -116,7 +122,7 @@
 
 
 
-                            <button id="btnAdd" type="button" class="btn btn-default" data-dismiss="modal">Guardar</button>
+                            <a href="#" id="btnAdd" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -135,10 +141,164 @@
     </script>
 }
 
+
+
+
 <script>
-    $('.openBtn').on('click', function () {
-        $('.modal-body').load('Index.cshtml', function () { 
-            $('#myModal').modal({ show: true });
-        });
+   
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("Action", "Controller")",
+        data: {
+            nombre: $("#nombre").val(),
+            apellido1: $("#apellido1").val,
+            apellido2: $("#apellido2").val,
+            edad: $("#edad").val,
+            activo: $("#active").val
+        },
+        success: function (Insertar) {
+            console.log("Exito");
+            window.location.href = "/ListViewModel/Index";
+        }
+    })
+        .done(function (result) {
+            if (result != null) {
+
+
+                // Limpia el formulario
+                $("#nombre").val("");
+                $("#apellido1").val("");
+                $("#apellido2").val("");
+                $("#edad").val("");
+                $("#active").val("");
+
+            }
+            });
+      
+          
+
+@*
+
+
+    //evento clic para boton actualizar
+    $(document).on('click', '.btnActualizar', function (e) {
+
+        e.preventDefault();
+
+        var row = $(this).parent().parent()[0];
+        Insertar = tabla.fnGetData(row);
+        fillModalData();
     });
+    //cargar datos en el modal
+    function fillModalData() {
+        $("nombre").val(Insertar[1] + "");
+        $("apellid1").val(Insertar[2] + "");
+        $("apelldo2").val(Insertar[3] + "");
+        $("edad").val(Insertar[4] + "");
+        $("active").val(Insertar[5] + "");
+
+    }
+*@
+
+
+    @* function validaForm() {
+        // Campos de texto
+        if ($("#Nombre").val() == "") {
+            alert("El campo Nombre no puede estar vacío.");
+            $("#Nombre").focus();
+            return false;
+        }
+        if ($("#ApellidoPaterno").val() == "") {
+            alert("El campo Apellidos no puede estar vacío.");
+            $("#ApellidoPaterno").focus();
+            return false;
+        }
+        if ($("#ApellidoMaterno").val() == "") {
+            alert("El campo Dirección no puede estar vacío.");
+            $("#ApellidoMaterno").focus();
+            return false;
+        }
+
+        if ($("#Edad").val() == "") {
+            alert("El campo Dirección no puede estar vacío.");
+            $("Edad").focus();
+            return false;
+        }
+
+
+
+        //evento clic insertar
+        return true;
+    }
+    $(document).ready(function () {
+        $("#btnAdd").click(function () {
+            if (validaForm()) {
+                $.post("Index.cshtml",
+                    $("#formdata").serialize(), function (res) {*@
+
+
+
+    @* $(document).ready(function () {
+                        $("btnAdd").click(function () {
+                            var Insertar = $("#Insertar").serialize();
+                            $("#myModal").modal(hide)
+                            $("#myModal").on('hidden.bs.modal', function () {
+                                alert("El registro se agrego correctamente")
+
+
+
+
+
+                                    *@
+
+
+
+
+
+@*
+    $(".btnNuevo").on("click", function () {
+        $('#myModal').openModal();
+        $(".Insertar")[0].reset();
+    });
+
+    $(".formAlumnos").submit(function (event) {
+        event.preventDefault();
+        });
+ 
+    function agregarAlumno() {
+        var checkedStatus;
+        if ($("#chkStatus").is(':checked')) {
+            checkedStatus = 1;
+        } else {
+            checkedStatus = 0;
+        }
+        var serializedData = {
+            metodo: 'insertarAlumno',
+            nombre: $("#nombre").val().toUpperCase(),
+            apellido1: $("#apellido1").val(),
+            apellido2: $("#apellido2").val(),
+            edad: $("#edad").val(),
+            activo: $("#active").val()
+        }
+
+        $.ajax({
+            url: "/Controllers/DefaultController",
+            type: "POST",
+            data: serializedData
+            
+            ,
+            success: function (response) {
+                Materialize.toast("Alumno Creado con Exito.", 4000);
+                $('#myModal').closeModal();
+                llenarListaAlumnos();
+            }
+         
+
+
+        });
+    }*@
+
 </script>
+
+
+
