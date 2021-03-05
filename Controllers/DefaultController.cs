@@ -44,7 +44,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Nuevo(ListViewModel modelo)
+        public ActionResult Nuevo(string Nombre, string ApellidoPaterno, string ApellidoMaterno, int Edad, bool Is_active)
         {
 
             SqlCommand comando = new SqlCommand();
@@ -52,7 +52,12 @@ namespace Web.Controllers
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "AgregarPersonal";
 
-           
+            comando.Parameters.AddWithValue("pNombre", Nombre);
+            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
+            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
+            comando.Parameters.AddWithValue("pEdad", Edad);
+            comando.Parameters.AddWithValue("pIs_Active", Is_active);
+
 
             conexion.Open();
 
@@ -67,14 +72,16 @@ namespace Web.Controllers
         {
             return View();
         }
-
-        public ActionResult Editar(int Id)
+        [HttpGet]
+        public ActionResult Editar(int id)
         {
             SqlCommand comando = new SqlCommand();
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "CargarEmpleado"; 
 
-            comando.Parameters.AddWithValue("pId", Id);
+            comando.Parameters.AddWithValue("pId", id);
+            
+
 
             SqlDataAdapter adaptador = new SqlDataAdapter();
             dtPersonal = new DataTable();
