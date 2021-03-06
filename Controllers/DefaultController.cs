@@ -38,13 +38,21 @@ namespace Web.Controllers
 
         }
 
-        public ActionResult Nuevo()
+
+
+
+
+        public ActionResult Nuevo(ListViewModel modelo)
         {
             return View();
         }
 
+
+
+
+
         [HttpPost]
-        public ActionResult Nuevo(string Nombre, string ApellidoPaterno, string ApellidoMaterno, int Edad, bool Is_active)
+        public ActionResult Nuevo(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
         {
 
             SqlCommand comando = new SqlCommand();
@@ -52,12 +60,12 @@ namespace Web.Controllers
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "AgregarPersonal";
 
+
             comando.Parameters.AddWithValue("pNombre", Nombre);
             comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
             comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
             comando.Parameters.AddWithValue("pEdad", Edad);
             comando.Parameters.AddWithValue("pIs_Active", Is_active);
-
 
             conexion.Open();
 
@@ -68,19 +76,34 @@ namespace Web.Controllers
             return View(dtPersonal);
         }
 
+
+
+
+
+
         public ActionResult Editar(PersonalViewModel model)
         {
             return View();
         }
-        [HttpGet]
-        public ActionResult Editar(int id)
+
+
+
+
+
+
+        [HttpPost]
+        public ActionResult Editar(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
         {
             SqlCommand comando = new SqlCommand();
             comando.CommandType = CommandType.StoredProcedure;
-            comando.CommandText = "CargarEmpleado"; 
+            comando.CommandText = "CargarEmpleado";
 
-            comando.Parameters.AddWithValue("pId", id);
-            
+
+            comando.Parameters.AddWithValue("pNombre", Nombre);
+            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
+            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
+            comando.Parameters.AddWithValue("pEdad", Edad);
+            comando.Parameters.AddWithValue("pIs_Active", Is_active);
 
 
             SqlDataAdapter adaptador = new SqlDataAdapter();
@@ -97,20 +120,18 @@ namespace Web.Controllers
 
         }
 
-            public ActionResult Eliminar()
-        {
-            return View();
-        }
 
-        public ActionResult Eliminar(String Nombre)
+
+
+
+
+        [HttpPost]
+        public ActionResult Eliminar(string Nombre)
         {
             SqlCommand comando = new SqlCommand();
             comando.Connection = conexion;
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "EliminarEstdiante";
-
-
-            comando.Parameters.AddWithValue("pNombre", Nombre);
 
             conexion.Open();
 
