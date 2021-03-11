@@ -83,6 +83,7 @@ namespace Web.Controllers
             comando.CommandText = "CargarEmpleado";
 
             comando.Parameters.AddWithValue("pId", Id);
+
             
 
 

@@ -45,7 +45,7 @@
 
 
 
-                        <button type="submit" id="btnEliminar" onclick="eliminar" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
+                        <button type="submit" id="btnEliminar" onclick="borrar(@Model.Rows[i][0])" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
                             Eliminar
                         </button>
 
@@ -157,99 +157,106 @@
 
         if (isNaN(vedad)) vedad = 0;
 
-         $.ajax({
-             type: 'POST',
-             url:"/Default/Nuevo/",
-            
-             data: {
-                 Nombre: vnombre,
-                 ApellidoPaterno: appep,
-                 ApellidoMaterno: appem,
-                 Edad: vedad,
-                 Is_Active: vactive
-                        },
-             success: function (data) {
-                            //valores
-                        }
+        $.ajax({
+            type: 'POST',
+            url: "/Default/Nuevo/",
+            data: {
+                Nombre: vnombre,
+                ApellidoPaterno: appep,
+                ApellidoMaterno: appem,
+                Edad: vedad,
+                Is_Active: vactive
+            },
+            success: function (data) {
+                //valores
+            }
 
-                    });
+        });
     });
 
 </script>
-
-
-<!--Funcion del boton eliminar-->
-
-<script>
-    $(document).on('click', '#btnEliminar', function (Id) {
-
-        var ans = confirm("¿Estas seguro de eliminar este Registro?");
-        if (ans) {
-            $.ajax({
-                url:"/Eliminar/Default/", Id,
-                type: "POST",
-                dataType: "json",
-                
-            });
-        }
-
-
-
-    });
-
-</script>
-
 
 <!--funcion del boton actualizar-->
 <script>
     function actualizar(Id) {
         console.log(Id);
+        $('#nombre')
+        $('#apellido1')
+        $('#apellido2')
+        $('#edad')
+        $('#active')
         $.ajax({
             type: 'GET',
-            dataType: 'JSON',
-            url: "/Default/Editar/", Id,
+            url: "/Default/Editar/"+ Id,
             data: {},
-            success: function (response) {
-            }
-        });}
+            success: function (result) {
+                $('#nombre').val(result.Nombre);
+                $('#apellido1').val(result.ApellidoPaterno);
+                $('#apellido2').val(result.ApellidoMaterno);
+                $('#edad').val(result.Edad);
+                $('#active').val(result.Nombre);
 
+                $('#myModal').modal('mostrar');
+            }
+        });
+    }
 
 </script>
-
-
 <script>
     $(document).on('click', '#btnAdd2', function (e) {
 
 
-        console.log("25252525");
-        var vnombre = $("#name").val();
-        var vappep = $("#Apellido1").val();
-        var appem = $("#Apellido2").val();
-        var vedad = parseInt( $("#Edad").val());
-        var vactive = $("#Active")
-        console.log("2626262626");
+        console.log("error3435434354");
+        var vnombre = $("#nombre").val();
+        console.log(vnombre);
+        var appep = $("#apellido1").val();
+        console.log(appep);
+        var appem = $("#apellido2").val();
+        console.log(appem);
+        var vedad = parseInt($("#edad").val());
+        console.log(vedad);
+        var vactive = $("#active").val();
+        console.log(vactive);
 
         if (isNaN(vedad)) vedad = 0;
-        console.log(vnombre);
-        // ajax que hace la conexion con la base de datos
-         $.ajax({
-                        type: 'POST',
-                        dataType: 'JSON',
-                        url: "@Url.Action("Editar", "Default")",
-                        data: {
-                            Nombre: $("#name").val(),
-                            ApellidoPaterno: $("#Apellido1").val(),
-                            ApellidoMaterno: $("#Apellido2").val(),
-                            Edad: $("#Edad").val(),
-                            Is_Active: $("#Active").val()
-                        },
-                        success: function (response) {
-                        }
 
-                    });
+        $.ajax({
+            type: 'POST',
+            url: "/Default/Editar/",
+
+            data: {
+                Nombre: vnombre,
+                ApellidoPaterno: appep,
+                ApellidoMaterno: appem,
+                Edad: vedad,
+                Is_Active: vactive
+            },
+            success: function (data) {
+                //valores
+            }
+
+        });
     });
 
 </script>
 
+<!--Funcion del boton eliminar-->
 
+<script>
+    function borrar(Id) {
+        console.log(Id)
+        var ans = confirm("¿Estas seguro de eliminar este Registro?");
+        if (ans) {
+            $.ajax({
+                url: "/Default/Eliminar/"+ Id,
+                type: "POST",
+                dataType: "json",
+                 success: function ("#Indes.cshtml") {
+                //valores
+            }
 
+            });
+        }
+    }
+
+</script>
