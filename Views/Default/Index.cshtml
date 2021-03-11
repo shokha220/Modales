@@ -12,7 +12,7 @@
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="btnNuevo">Nuevo </button>
 
     <div class="col-md-12">
-        <table class="table">
+        <table class="table" id="MiTabla">
 
 
 
@@ -30,7 +30,7 @@
             @for (int i = 0; i < Model.Rows.Count; i++)
             {
                 <tr>
-                    <td>@Model.Rows[i][0]</td>
+                    <td id="Identificador">@Model.Rows[i][0]</td>
                     <td>@Model.Rows[i][1]</td>
                     <td>@Model.Rows[i][2]</td>
                     <td>@Model.Rows[i][3]</td>
@@ -40,12 +40,12 @@
 
                     <td>
 
-                        <button type="submit" id="btnActualizar" class="btn btn-info" data-toggle="modal" data-target="#myModal2">Editar</button>
+                        <button type="submit" id="btnActualizar" onclick="actualizar(@Model.Rows[i][0])" class="btn btn-info" data-toggle="modal" data-target="#myModal">Editar</button>
 
 
 
 
-                        <button type="submit" id="btnEliminar" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
+                        <button type="submit" id="btnEliminar" onclick="eliminar" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
                             Eliminar
                         </button>
 
@@ -71,6 +71,8 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 
 
 <div class="container">
@@ -135,114 +137,39 @@
 
 </div>
 
-<div class="container">
-
-
-    <div class="panel-body" id="Objetos">
-    </div>
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal2" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Contenido del Modal-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                </div>
-                <div class="modal-body">
-                    <form id="Insertar">
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="name" href ="anombre">
-                        </div>
-                        <div class="form-group">
-                            <label for="c1">Apelido Paterno:</label>
-                            <input type="text" class="form-control" id="Apellido1" href ="aApellido1 ">
-                        </div>
-                        <div class="form-group">
-                            <label for="c2">Apelido Materno</label>
-                            <input type="text" class="form-control" id="Apellido2" href ="aApellido2">
-                        </div>
-                        <div class="form-group">
-                            <label for="c2">Edad</label>
-                            <input type="text" class="form-control" id="Edad" href="aedad">
-                        </div>
-                        <div class="form-group">
-                            <label for="c2">Activo</label>
-
-
-                            <select id="Active" for="c2" href ="aActive">
-                                <option value="True">Activo</option>
-
-                                <option value="False">Inactivo</option>
-                            </select>
-
-                        </div>
-
-
-
-                        <a href="#" id="btnAdd2" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
 
 <!-- Seccion de Scripts -->
-<!-- Funcion que manda un mensaje al momeno de eliminar un registro-->
-@*<script>
-        $(function mostrar () {
-            $('[data-toggle="popover"]').popover()
-        })
-
-        console.log("hasta aqui funciona");
-    </script>*@
-
-
-
-
-
 <!--Funcion del boton de insertar-->
 <script>
     $(document).on('click', '#btnAdd', function (e) {
 
         console.log("error3435434354");
-        var vnombre = $("#name").val();
-        var vappep = $("#apellido1").val();
+        var vnombre = $("#nombre").val();
+        console.log(vnombre);
+        var appep = $("#apellido1").val();
+        console.log(appep);
         var appem = $("#apellido2").val();
-        var vedad = parseInt( $("#edad").val());
-        var vactive = $("#active")
-        console.log("error3435434354");
+        console.log(appem);
+        var vedad = parseInt($("#edad").val());
+        console.log(vedad);
+        var vactive = $("#active").val();
+        console.log(vactive);
 
         if (isNaN(vedad)) vedad = 0;
 
-        // ajax que hace la conexion con la base de datos
          $.ajax({
-                        type: 'POST',
-                        dataType: 'JSON',
-                        url: "@Url.Action("Nuevo", "Default")",
-                        data: {
-                            Nombre: $("#name").val(),
-                            ApellidoPaterno: $("#Apellido1").val(),
-                            ApellidoMaterno: $("#Apellido2").val(),
-                            Edad: $("#Edad").val(),
-                            Is_Active: $("#active").val()
+             type: 'POST',
+             url:"/Default/Nuevo/",
+            
+             data: {
+                 Nombre: vnombre,
+                 ApellidoPaterno: appep,
+                 ApellidoMaterno: appem,
+                 Edad: vedad,
+                 Is_Active: vactive
                         },
-                        success: function (response) {
+             success: function (data) {
+                            //valores
                         }
 
                     });
@@ -254,114 +181,45 @@
 <!--Funcion del boton eliminar-->
 
 <script>
-
-
     $(document).on('click', '#btnEliminar', function (Id) {
-        console.log("dgdfgdhfsgh")
 
-        function Borrar(Id) {
-            var ans = confirm("¿Estas seguro de eliminar este registri?")
-
-            if (ans) {
-
-                $.ajax({
-                    url: "@Url.Action("Eliminar", "Default")" + Id,
-                typr: "POST",
+        var ans = confirm("¿Estas seguro de eliminar este Registro?");
+        if (ans) {
+            $.ajax({
+                url:"/Eliminar/Default/", Id,
+                type: "POST",
                 dataType: "json",
-                success: function (result) {
-
-                },
+                
             });
-
-            }
         }
+
+
 
     });
 
 </script>
-
 
 
 <!--funcion del boton actualizar-->
-
 <script>
-    $(document).on('click', '#btnActualizar', function (e) {
-        console.log("funciona el boton actualizar")
-
-
-        var dato1 = $(this).data("name");
-        var dato2 = $(this).data("Apellido1");
-        var dato3 = $(this).data("Apellido2");
-        var dato4 = $(this).data("Edad");
-        var dato5 = $(this).data("Active");
-
-
-        $('#name #aname').val(dato1);
-        $('#Apellido1 #aApellido1').val(dato2);
-        $('#Apellido2 #aApellido2').val(dato3);
-        $('#Edad #aEdad').val(dato4);
-        $('#Active #aActive').val(dato5);
-
-            console.log("si llega a esta parte")
-
-            $.ajax({
-                url: "@Url.Action("Editar", "Default")",
-                typr: "POST",
-                dataType: "json",
-                success: function (result) {
-                    $('#Id').val(result.Id);
-                    $('#name').val(result.Nombre);
-                    $('#Apellido1').val(result.ApellidoPaterno);
-                    $('#Apellido2').val(result.ApellidoMaterno);
-                    $('#Edad').val(result.Edad);
-                    $('#Active').val(result.Is_Active);
-
-                },
-            });
-
-        console.log("pasa por aqui")
-
-        function Update() {
-            var res = validate();
-            if (res == false) {
-                return false;
+    function actualizar(Id) {
+        console.log(Id);
+        $.ajax({
+            type: 'GET',
+            dataType: 'JSON',
+            url: "/Default/Editar/", Id,
+            data: {},
+            success: function (response) {
             }
-            console.log("tambian pasa por aqui")
-            var empObj = {
-
-                Nombre: $("#name").val([result.Id]),
-                ApellidoPaterno: $("#Apellido1").val([result.Nombre]),
-                ApellidoMaterno: $("#Apellido2").val([]),
-                Edad: $("#Edad").val([]),
-                Is_Active: $("#Active").val([])
-
-            };
-            console.log("llega hasta aqui");
-            $.ajax({
-                url: "@Url.Action("Editar", "Default")" + Id,
-                data: JSON.stringify(empObj),
-                type: "GET",
-                dataType: "json",
-                success: function (result) {
-                    loadData();
-                    $("#name").val(""),
-                    $("#Apellido1").val(""),
-                    $("#Apellido2").val(""),
-                    $("#Edad").val(""),
-                    $("#Active").val("")
-                },
-                error: function (errormessage) {
-                    alert(errormessage.responseText);
-                }
-            });
-        }
-    });
-
+        });}
 
 
 </script>
+
+
 <script>
     $(document).on('click', '#btnAdd2', function (e) {
+
 
         console.log("25252525");
         var vnombre = $("#name").val();
@@ -372,7 +230,7 @@
         console.log("2626262626");
 
         if (isNaN(vedad)) vedad = 0;
-
+        console.log(vnombre);
         // ajax que hace la conexion con la base de datos
          $.ajax({
                         type: 'POST',

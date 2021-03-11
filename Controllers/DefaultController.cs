@@ -75,35 +75,15 @@ namespace Web.Controllers
             conexion.Close();
             return View(dtPersonal);
         }
-
-
-
-
-
-
-        public ActionResult Editar(PersonalViewModel model)
-        {
-            return View();
-        }
-
-
-
-
-
-
-        [HttpPost]
-        public ActionResult Editar(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
+        [HttpGet]
+        public ActionResult Editar(int Id )
         {
             SqlCommand comando = new SqlCommand();
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "CargarEmpleado";
 
-
-            comando.Parameters.AddWithValue("pNombre", Nombre);
-            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
-            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
-            comando.Parameters.AddWithValue("pEdad", Edad);
-            comando.Parameters.AddWithValue("pIs_Active", Is_active);
+            comando.Parameters.AddWithValue("pId", Id);
+            
 
 
             SqlDataAdapter adaptador = new SqlDataAdapter();
@@ -112,7 +92,7 @@ namespace Web.Controllers
             conexion.Open();
 
             adaptador.SelectCommand = comando;
-            adaptador.Fill(dtPersonal);
+            
 
             conexion.Close();
 
@@ -120,18 +100,15 @@ namespace Web.Controllers
 
         }
 
-
-
-
-
-
         [HttpPost]
-        public ActionResult Eliminar(string Nombre)
+        public ActionResult Eliminar(int Id)
         {
             SqlCommand comando = new SqlCommand();
             comando.Connection = conexion;
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "EliminarEstdiante";
+
+            comando.Parameters.AddWithValue("pId", Id);
 
             conexion.Open();
 
