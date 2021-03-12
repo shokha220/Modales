@@ -38,6 +38,31 @@ namespace Web.Controllers
 
         }
 
+        public ActionResult Mostrar(int Id)
+        {
+            SqlCommand comando = new SqlCommand();
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.CommandText = "MostrarEmpleado";
+
+            comando.Parameters.AddWithValue("pId", Id);
+
+
+
+
+            SqlDataAdapter adaptador = new SqlDataAdapter();
+            dtPersonal = new DataTable();
+
+            conexion.Open();
+
+            adaptador.SelectCommand = comando;
+
+
+            conexion.Close();
+
+            return View(dtPersonal);
+
+        }
+
 
 
 
@@ -46,10 +71,6 @@ namespace Web.Controllers
         {
             return View();
         }
-
-
-
-
 
         [HttpPost]
         public ActionResult Nuevo(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
@@ -76,15 +97,19 @@ namespace Web.Controllers
             return View(dtPersonal);
         }
         [HttpGet]
-        public ActionResult Editar(int Id )
+        public ActionResult Editar(String Nombre, String ApellidoPaterno, String ApellidoMaterno, int Edad, bool Is_active)
         {
             SqlCommand comando = new SqlCommand();
             comando.CommandType = CommandType.StoredProcedure;
-            comando.CommandText = "CargarEmpleado";
+            comando.CommandText = "MostrarEmpleado";
 
-            comando.Parameters.AddWithValue("pId", Id);
+            comando.Parameters.AddWithValue("pNombre", Nombre);
+            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
+            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
+            comando.Parameters.AddWithValue("pEdad", Edad);
+            comando.Parameters.AddWithValue("pIs_Active", Is_active);
 
-            
+
 
 
             SqlDataAdapter adaptador = new SqlDataAdapter();
@@ -92,8 +117,8 @@ namespace Web.Controllers
 
             conexion.Open();
 
-            adaptador.SelectCommand = comando;
-            
+            comando.ExecuteNonQuery();
+
 
             conexion.Close();
 

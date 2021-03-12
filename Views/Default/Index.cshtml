@@ -4,20 +4,13 @@
     ViewBag.Title = "Index";
 }
 
-
-
 <h2>Personal</h2>
 
 <div class="row" style="text-align:right;padding:5px">
     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="btnNuevo">Nuevo </button>
-
-    <div class="col-md-12">
+    <div id="refrescar" class="col-md-12">
         <table class="table" id="MiTabla">
-
-
-
             <tr>
-
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Apellido Paterno</th>
@@ -36,39 +29,25 @@
                     <td>@Model.Rows[i][3]</td>
                     <td>@Model.Rows[i][4]</td>
                     <td>@Model.Rows[i][5]</td>
-
-
                     <td>
 
-                        <button type="submit" id="btnActualizar" onclick="actualizar(@Model.Rows[i][0])" class="btn btn-info" data-toggle="modal" data-target="#myModal">Editar</button>
-
-
-
+                        <button type="submit" id="btnActualizar" onclick="actualizar(@Model.Rows[i][0])" class="btn btn-info" data-toggle="modal" data-target="#myModal2">Editar</button>
 
                         <button type="submit" id="btnEliminar" onclick="borrar(@Model.Rows[i][0])" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Este registro fue eliminado">
                             Eliminar
                         </button>
-
                     </td>
                 </tr>
-
             }
-
-
         </table>
-
-
     </div>
 </div>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
@@ -76,21 +55,15 @@
 
 
 <div class="container">
-
-
     <div class="panel-body" id="Objetos">
     </div>
-
-
     <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
-
             <!-- Contenido del Modal-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-
                 </div>
                 <div class="modal-body">
                     <form id="Insertar">
@@ -112,19 +85,69 @@
                         </div>
                         <div class="form-group">
                             <label for="c2">Activo</label>
-
-
                             <select id="active" for="c2">
                                 <option value="True">Activo</option>
-
                                 <option value="False">Inactivo</option>
                             </select>
+                        </div>
+                        <a href="#" id="btnAdd" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
 
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="container">
+    <div class="panel-body" id="Objetos">
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog">
+            <!-- Contenido del Modal-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="Insertar">
+
+                        <div class="form-group">
+                            <label for="id">Id:</label>
+                            <input type="text" disabled="disabled" class="form-control" id="nombre">
                         </div>
 
-
-
-                        <a href="#" id="btnAdd" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="c1">Apelido Paterno:</label>
+                            <input type="text" class="form-control" id="apellido1">
+                        </div>
+                        <div class="form-group">
+                            <label for="c2">Apelido Materno</label>
+                            <input type="text" class="form-control" id="apellido2">
+                        </div>
+                        <div class="form-group">
+                            <label for="c2">Edad</label>
+                            <input type="text" class="form-control" id="edad">
+                        </div>
+                        <div class="form-group">
+                            <label for="c2">Activo</label>
+                            <select id="active" for="c2">
+                                <option value="True">Activo</option>
+                                <option value="False">Inactivo</option>
+                            </select>
+                        </div>
+                        <a href="#" id="btnAdd2" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -168,7 +191,7 @@
                 Is_Active: vactive
             },
             success: function (data) {
-                //valores
+                $("#MiTabla").load();
             }
 
         });
@@ -178,32 +201,52 @@
 
 <!--funcion del boton actualizar-->
 <script>
-    function actualizar(Id) {
-        console.log(Id);
-        $('#nombre')
-        $('#apellido1')
-        $('#apellido2')
-        $('#edad')
-        $('#active')
-        $.ajax({
-            type: 'GET',
-            url: "/Default/Editar/"+ Id,
-            data: {},
-            success: function (result) {
-                $('#nombre').val(result.Nombre);
-                $('#apellido1').val(result.ApellidoPaterno);
-                $('#apellido2').val(result.ApellidoMaterno);
-                $('#edad').val(result.Edad);
-                $('#active').val(result.Nombre);
+    function datos(data) {
+        $("#" + updateId).empty();
 
-                $('#myModal').modal('mostrar');
-            }
-        });
+        $.each(data, function (i, item) {
+            $("#" + Insertar).append("<option id='"
+                + item.Nombre + "'>" + item.apellido1 + item.apellido2 + item.edad + item.activo
+                + "</option>");
+        })
+    }
+        function actualizar(Id) {
+            console.log(Id);
+
+            $.ajax({
+                type: 'GET',
+                url: "/Default/Mostrar/" + Id,
+                data: {},
+               
+                success: function (response) {
+                    $('#id').val(response.Id);
+                    $('#nombre').val(response.Nombre);
+                    console.log(response.Nombre)
+                    $('#apellido1').val(response.ApellidoPaterno);
+                    console.log(response.Nombre)
+                    $('#apellido2').val(response.ApellidoMaterno);
+                    console.log(response.Nombre)
+                    $('#edad').val(response.Edad);
+                    console.log(response.Nombre)
+                    $('#active').val(response.Nombre);
+                    console.log(response.Nombre)
+                }
+            });
+        
+    }
+    function datos(data) {
+        $("#" + updateId).empty();
+
+        $.each(data, function (i, item) {
+            $("#" + Insertar).append("<option id='"
+                + item.Nombre + "'>" + item.apellido1 + item.apellido2 + item.edad + item.activo
+                + "</option>");
+        })
     }
 
 </script>
 <script>
-    $(document).on('click', '#btnAdd2', function (e) {
+    $(document).on('click', '#btnAdd', function (e) {
 
 
         console.log("error3435434354");
@@ -248,12 +291,12 @@
         var ans = confirm("¿Estas seguro de eliminar este Registro?");
         if (ans) {
             $.ajax({
-                url: "/Default/Eliminar/"+ Id,
+                url: "/Default/Eliminar/" + Id,
                 type: "POST",
                 dataType: "json",
-                 success: function ("#Indes.cshtml") {
-                //valores
-            }
+                success: function () {
+                    $("#MiTabla").load();
+                }
 
             });
         }
