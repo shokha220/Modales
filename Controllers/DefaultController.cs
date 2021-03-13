@@ -41,25 +41,37 @@ namespace Web.Controllers
         public ActionResult Mostrar(int Id)
         {
             SqlCommand comando = new SqlCommand();
+            comando.Connection = conexion;
             comando.CommandType = CommandType.StoredProcedure;
-            comando.CommandText = "MostrarEmpleado";
-
-            comando.Parameters.AddWithValue("pId", Id);
-
-
+            comando.CommandText = "SeleccionarPersonal ";
 
 
             SqlDataAdapter adaptador = new SqlDataAdapter();
-            dtPersonal = new DataTable();
+          
 
             conexion.Open();
 
-            adaptador.SelectCommand = comando;
 
+            List<ListViewModel> MostraDatos = new List<ListViewModel>();
+            DataTable dtPersonal = new DataTable();
+            MostraDatos = dtPersonal.AsEnumerable().Select(x => new ListViewModel
+            {
+                Id = (int)x["Id"],
+                Nombre = (string)x["Nombre"],
+                ApellidoPaterno = (string)x["ApellidoPaterno"],
+                ApellidoMaterno = (string)x["ApellidoMaterno"],
+                Edad = (int)x["Edad"],
+                Is_active = (bool)x["Is_Active"]
+            }).ToList();
+
+
+            comando.ExecuteNonQuery();
+            adaptador.SelectCommand = comando;
+            adaptador.Fill(dtPersonal);
 
             conexion.Close();
 
-            return View(dtPersonal);
+            return Json(dtPersonal);
 
         }
 
