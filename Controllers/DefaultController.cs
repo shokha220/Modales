@@ -8,6 +8,7 @@ using Web.Controllers;
 using System.Data.SqlClient;
 using Web.Models.ViewModel;
 //using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Web.Controllers
 {
@@ -37,7 +38,7 @@ namespace Web.Controllers
             return View(dtPersonal);
 
         }
-
+        [HttpGet]
         public ActionResult Mostrar(int Id)
         {
             SqlCommand comando = new SqlCommand();
@@ -51,27 +52,26 @@ namespace Web.Controllers
 
             conexion.Open();
 
+           
 
             List<ListViewModel> MostraDatos = new List<ListViewModel>();
             DataTable dtPersonal = new DataTable();
             MostraDatos = dtPersonal.AsEnumerable().Select(x => new ListViewModel
             {
-                Id = (int)x["Id"],
                 Nombre = (string)x["Nombre"],
                 ApellidoPaterno = (string)x["ApellidoPaterno"],
                 ApellidoMaterno = (string)x["ApellidoMaterno"],
                 Edad = (int)x["Edad"],
                 Is_active = (bool)x["Is_Active"]
             }).ToList();
-
-
             comando.ExecuteNonQuery();
+
             adaptador.SelectCommand = comando;
             adaptador.Fill(dtPersonal);
 
             conexion.Close();
 
-            return Json(dtPersonal);
+            return Json("dtPersonal", JsonRequestBehavior.AllowGet);
 
         }
 

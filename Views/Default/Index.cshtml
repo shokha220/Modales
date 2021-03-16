@@ -95,7 +95,7 @@
                                 <option value="False">Inactivo</option>
                             </select>
                         </div>
-                        <a href="#" id="btnAdd" type="button" class="btn btn-default" data-dismiss="modal">Guardar</a>
+                        <a href="#" id="btnAdd" type="button" onclic ="loadDoc"class="btn btn-default" data-dismiss="modal">Guardar</a>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -148,6 +148,7 @@
 
         });
     });
+  
 
 </script>
 
@@ -158,25 +159,28 @@
         $.ajax({
             type: 'GET',
             url: "/Default/Mostrar?Id=" + Id,
-
+            dataType: "Json",
             success: function (response) {
                 console.log(response);
-                //$('#iden').val(response.Id);
-                //console.log(response.Id);
-                //$('#nombre').val(response.Nombre);
-                //console.log(response.Nombre);
-                //$('#apellido1').val(response.ApellidoPaterno);
-                //console.log(response.ApellidoPaterno);
-                //$('#apellido2').val(response.ApellidoMaterno);
-                //console.log(response.ApellidoMaterno);
-                //$('#edad').val(response.Edad);
-                //console.log(response.Edad);
-                //$('#active').val(response.Is_Active);
-                //console.log(response.Is_Active);
+                $('#iden').val(response.Id);
+                console.log(response.Id);
+                $('#nombre').val(response.Nombre);
+                console.log(response.Nombre);
+                $('#apellido1').val(response.ApellidoPaterno);
+                console.log(response.ApellidoPaterno);
+                $('#apellido2').val(response.ApellidoMaterno);
+                console.log(response.ApellidoMaterno);
+                $('#edad').val(response.Edad);
+                console.log(response.Edad);
+                $('#active').val(response.Is_Active);
+               console.log(response.Is_Active);
 
-                //$('#myModal').modal('show');
+                $('#myModal').modal('show');
             }
 
+        }).done((resultado) => {
+            console.log("Esta saliendo del ajax");
+            console.log(resultado);
         });
     }
 
