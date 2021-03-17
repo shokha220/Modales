@@ -51,7 +51,7 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 
 
 <div class="container">
@@ -99,7 +99,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button"onclic ="agregar" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
 
@@ -114,9 +114,8 @@
 
 
 <!-- Seccion de Scripts -->
-<!--Funcion del boton de insertar-->
 <script>
-    $(document).on('click', '#btnAdd', function (e) {
+    function agregar(e) {
 
         console.log("error3435434354");
         var vnombre = $("#nombre").val();
@@ -143,26 +142,28 @@
                 Is_Active: vactive
             },
             success: function (data) {
-                $("#MiTabla").load("objetos");
+                $('#MiTabla').html(html);
             }
 
         });
-    });
-  
-
-</script>
-
-<!--funcion del boton actualizar-->
-<script>
+    }
     function actualizar(Id) {
         console.log(Id)
+
+        $('#iden')
+        $('#nombre')
+        $('#apellido1')
+        $('#apellido2')
+        $('#edad')
+        $('#active')
+
         $.ajax({
             type: 'GET',
             url: "/Default/Mostrar?Id=" + Id,
             dataType: "Json",
             success: function (response) {
-                console.log(response);
-                $('#iden').val(response.Id);
+                console.log(response);          
+               $('#iden').val(response.Id);
                 console.log(response.Id);
                 $('#nombre').val(response.Nombre);
                 console.log(response.Nombre);
@@ -175,19 +176,19 @@
                 $('#active').val(response.Is_Active);
                console.log(response.Is_Active);
 
-                $('#myModal').modal('show');
+               $('#myModal').modal('show');
             }
 
         }).done((resultado) => {
             console.log("Esta saliendo del ajax");
             console.log(resultado);
+            
         });
+        return false;
+
     }
 
-
-</script>
-<script>
-    $(document).on('click', '#btnAdd', function (e) {
+    function agregar(e) {
 
 
         console.log("error3435434354");
@@ -220,13 +221,7 @@
             }
 
         });
-    });
-
-</script>
-
-<!--Funcion del boton eliminar-->
-
-<script>
+    }
     function borrar(Id) {
         console.log(Id)
         var ans = confirm("¿Estas seguro de eliminar este Registro?");
@@ -236,7 +231,8 @@
                 type: "POST",
                 dataType: "json",
                 success: function () {
-                    $("#MiTabla").load();
+
+                    $('#MiTabla').DataTable().ajax.reload();
                 }
 
             });
@@ -244,10 +240,3 @@
     }
 
 </script>
-
-@*
-    var len = response.length;
-                               for (var i = 0; i < len; i++) {
-                                   var id = response[i].Id;
-                                   console.log(id)
-                               }*@

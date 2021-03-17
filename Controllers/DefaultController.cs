@@ -38,6 +38,12 @@ namespace Web.Controllers
             return View(dtPersonal);
 
         }
+        public ActionResult Mostrar(ListViewModel model)
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public ActionResult Mostrar(int Id)
         {
@@ -45,40 +51,36 @@ namespace Web.Controllers
             comando.Connection = conexion;
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "SeleccionarPersonal ";
-
-
+       
             SqlDataAdapter adaptador = new SqlDataAdapter();
-          
-
-            conexion.Open();
-
-           
-
             List<ListViewModel> MostraDatos = new List<ListViewModel>();
-            DataTable dtPersonal = new DataTable();
+            DataTable dtPersonal = new DataTable();    
+            
+            conexion.Open();
+            comando.ExecuteNonQuery();
+          
             MostraDatos = dtPersonal.AsEnumerable().Select(x => new ListViewModel
             {
+                Id = (int)x["Id"],
                 Nombre = (string)x["Nombre"],
                 ApellidoPaterno = (string)x["ApellidoPaterno"],
                 ApellidoMaterno = (string)x["ApellidoMaterno"],
                 Edad = (int)x["Edad"],
-                Is_active = (bool)x["Is_Active"]
+                is_active = (bool)x["is_active"]
             }).ToList();
-            comando.ExecuteNonQuery();
+          
 
             adaptador.SelectCommand = comando;
             adaptador.Fill(dtPersonal);
 
             conexion.Close();
 
-            return Json("dtPersonal", JsonRequestBehavior.AllowGet);
+            return Json(MostraDatos, JsonRequestBehavior.AllowGet);
+
+
+           
 
         }
-
-
-
-
-
         public ActionResult Nuevo(ListViewModel modelo)
         {
             return View();
@@ -91,14 +93,14 @@ namespace Web.Controllers
             SqlCommand comando = new SqlCommand();
             comando.Connection = conexion;
             comando.CommandType = CommandType.StoredProcedure;
-            comando.CommandText = "AgregarPersonal";
+            comando.CommandText = "@Accion:Insert" ;
 
 
-            comando.Parameters.AddWithValue("pNombre", Nombre);
-            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
-            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
-            comando.Parameters.AddWithValue("pEdad", Edad);
-            comando.Parameters.AddWithValue("pIs_Active", Is_active);
+            comando.Parameters.AddWithValue("Nombre", Nombre);
+            comando.Parameters.AddWithValue("ApellidoPaterno", ApellidoPaterno);
+            comando.Parameters.AddWithValue("ApellidoMaterno", ApellidoMaterno);
+            comando.Parameters.AddWithValue("Edad", Edad);
+            comando.Parameters.AddWithValue("is_active", Is_active);
 
             conexion.Open();
 
@@ -115,11 +117,11 @@ namespace Web.Controllers
             comando.CommandType = CommandType.StoredProcedure;
             comando.CommandText = "MostrarEmpleado";
 
-            comando.Parameters.AddWithValue("pNombre", Nombre);
-            comando.Parameters.AddWithValue("pApellidoPaterno", ApellidoPaterno);
-            comando.Parameters.AddWithValue("pApellidoMaterno", ApellidoMaterno);
-            comando.Parameters.AddWithValue("pEdad", Edad);
-            comando.Parameters.AddWithValue("pIs_Active", Is_active);
+            comando.Parameters.AddWithValue("Nombre", Nombre);
+            comando.Parameters.AddWithValue("ApellidoPaterno", ApellidoPaterno);
+            comando.Parameters.AddWithValue("ApellidoMaterno", ApellidoMaterno);
+            comando.Parameters.AddWithValue("Edad", Edad);
+            comando.Parameters.AddWithValue("is_active", Is_active);
 
 
 

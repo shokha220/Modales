@@ -15,7 +15,7 @@ namespace Web.Models.ViewModel
 
         public int? Edad { get; set; }
 
-        public Nullable<bool> Is_active { get; set; }
+        public Nullable<bool> is_active { get; set; }
 
     }
 }
